@@ -1,7 +1,19 @@
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { Routes, provideRouter } from '@angular/router';
+import { AppComponent } from './app/app.component';
+import { EagerComponent as HomeComponent } from './app/home/home.component';
+import { AnotherComponent } from './app/another/another.component';
 
-import { AppModule } from './app/app.module';
+const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'another', component: AnotherComponent },
+  {
+    path: 'lazy',
+    loadComponent: () => import('./app/lazy/lazy.component').then(c => c.LazyComponent)
+  },
+];
 
-
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [provideRouter(routes)],
+});
